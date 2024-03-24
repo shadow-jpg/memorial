@@ -6,7 +6,9 @@
         public string Title { get; set; }
         public int AuthorId { get; set; } = 1;
         public Author Author { get; set; }
+        public Chapter[] Chapters { get; set; }
         public string Genre { get; set; }
+        public byte? Allowed_ToRead_without_payment { get; set; }
         public string Description { get; set; }
         public string CoverImageUrl { get; set; }
         public double? Rating { get; set; }

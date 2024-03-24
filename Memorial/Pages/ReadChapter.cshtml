@@ -1,0 +1,40 @@
+﻿
+@page "/read/{id:int}"
+@model Memorial.Pages.ReadChapterModel
+@{
+    ViewData["Title"] = "";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Боковая панель с главами -->
+        <div class="col-md-3 sidebar" id="sidebar">
+            <div class="list-group">
+                @foreach (var chapter in Model.Chapters)
+                {
+                    <a href="/read/@chapter.Id" class="list-group-item list-group-item-action @(chapter.Id == Model.CurrentChapter.Id ? "active" : "")">
+                        @chapter.Title
+                    </a>
+                }
+            </div>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="col-md-9 content">
+            <h1>@Model.CurrentChapter.Title</h1>
+            <p class="lead">@Model.CurrentChapter.Content</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        sidebar.addEventListener('mouseenter', () => {
+            sidebar.style.width = '250px';
+        });
+        sidebar.addEventListener('mouseleave', () => {
+            sidebar.style.width = '60px';
+        });
+    </script>
+}

@@ -11,11 +11,18 @@ namespace Memorial.Data
 
         public DbSet<Poem> Poems { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Chapter> Chapters { get; set; }
         //public DbSet<Author> Authors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Chapter>()
+            .HasOne(c => c.Book)
+            .WithMany(b => b.Chapters)
+            .HasForeignKey(c => c.BookId)
+            .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Poem>()
                 .HasOne(p => p.Author)

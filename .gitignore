@@ -1,0 +1,16 @@
+## Ignore Visual Studio temporary files
+.vs/
+bin/
+obj/
+
+## Ignore NuGet и пользовательские настройки
+*.user
+*.suo
+*.nupkg
+
+## Игнорировать файлы сборки и пакетов
+[Dd]ebug/
+[Rr]elease/
+*.pdb
+*.dll
+*.exe

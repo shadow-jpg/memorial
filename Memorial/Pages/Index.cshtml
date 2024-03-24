@@ -1,0 +1,61 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Добро пожаловать на Мемориальный Сайт</h1>
+    <p class="text-center text-muted">Откройте для себя мир высокой поэзии.</p>
+
+    <!-- Фильтры -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Search by title or author..." />
+        </div>
+        <div class="col-md-3">
+            <select class="form-control">
+                <option value="">All Genres</option>
+                <option value="Classic">Classic</option>
+                <option value="Poetry">Poetry</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary w-100">Search</button>
+        </div>
+    </div>
+
+    <h2 class="mb-3">Книги</h2>
+    <div class="row">
+       @*  @foreach (var book in Model.Books)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="@book.CoverImageUrl" class="card-img-top" alt="@book.Title">
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
+                        <p class="card-text">@book.Description</p>
+                        <a href="#" class="btn btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        } *@
+    </div>
+
+    <h2 class="mb-3">Стихи</h2>
+    <div class="row">
+     @*    @foreach (var poem in Model.Poems)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@poem.Title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@poem.Author</h6>
+                        <p class="card-text">@poem.Content</p>
+                        <a href="#" class="btn btn-outline-primary">Read Full Poem</a>
+                    </div>
+                </div>
+            </div>
+        } *@
+    </div>
+</div>

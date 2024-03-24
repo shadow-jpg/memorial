@@ -53,5 +53,18 @@ namespace Memorial.services
                 await _context.SaveChangesAsync();
             }
         }
+
+        internal async Task<Poem> GetToREADPoemWithIdAsync(int poemId)
+        {
+            var poem = await _context.Poems
+                        .Include(p => p.Author)
+                        .FirstOrDefaultAsync(p => p.Id == poemId);
+            if (poem != null)
+            {
+                poem.ViewsCount++;
+                await _context.SaveChangesAsync();
+            }
+            return poem;
+        }
     }
 }

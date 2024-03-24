@@ -1,0 +1,49 @@
+﻿@page"{id}"
+@model Memorial.Pages.PoemEnlistedModel
+@{
+    ViewData["Title"] = Model.Poem.Title;
+}
+
+<div class="container mt-4">
+    <div class="poem-detail">
+        <h1 class="poem-title">@Model.Poem.Title</h1>
+        
+        <div class="poem-author mb-4">
+            <a asp-page="/Authors/Details" asp-route-id="@Model.Poem.Author.Id">
+                @Model.Poem.Author.Name
+            </a>
+        </div>
+        
+        <div class="poem-content">
+            @Html.Raw(Model.Poem.Content.Replace("\n", "<br>"))
+        </div>
+        
+        <div class="poem-meta mt-4">
+            <small class="text-muted">
+                Добавлено: @Model.Poem.CreatedAt.ToString("dd.MM.yyyy") | 
+                Просмотров: @Model.Poem.ViewsCount
+            </small>
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <a asp-page="./Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Назад к списку
+        </a>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .poem-content {
+            white-space: pre-line;
+            font-family: 'Georgia', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .poem-title {
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+    </style>
+}

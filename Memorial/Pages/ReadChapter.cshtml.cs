@@ -21,5 +21,6 @@ namespace Memorial.Pages
             Chapters = _chapterService.GetChapters();
             CurrentChapter = _chapterService.GetChapterById(id) ?? Chapters.First();
         }
+
     }
 }

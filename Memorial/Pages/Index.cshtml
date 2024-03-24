@@ -26,25 +26,25 @@
 
     <h2 class="mb-3">Книги</h2>
     <div class="row">
-       @*  @foreach (var book in Model.Books)
+        @foreach (var book in Model.Books)
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
                     <img src="@book.CoverImageUrl" class="card-img-top" alt="@book.Title">
                     <div class="card-body">
                         <h5 class="card-title">@book.Title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
+                        @* <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6> *@
                         <p class="card-text">@book.Description</p>
-                        <a href="#" class="btn btn-outline-primary">Read More</a>
+                        <a href="#" class="btn btn-outline-primary">Прочитать</a>
                     </div>
                 </div>
             </div>
-        } *@
+        }
     </div>
 
     <h2 class="mb-3">Стихи</h2>
     <div class="row">
-     @*    @foreach (var poem in Model.Poems)
+        @foreach (var poem in Model.Poems)
         {
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
@@ -52,10 +52,10 @@
                         <h5 class="card-title">@poem.Title</h5>
                         <h6 class="card-subtitle mb-2 text-muted">@poem.Author</h6>
                         <p class="card-text">@poem.Content</p>
-                        <a href="#" class="btn btn-outline-primary">Read Full Poem</a>
+                        <a href="#" class="btn btn-outline-primary">Прочитать полный стих</a>
                     </div>
                 </div>
             </div>
-        } *@
+        }
     </div>
 </div>

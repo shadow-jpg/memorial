@@ -12,7 +12,11 @@ namespace Memorial.services
         {
             _context = context;
         }
-
+        public async Task CreateBook(Book book)
+        {
+            _context.Books.Add(book);
+            await _context.SaveChangesAsync();
+        }
         public List<Book> GetBooks() => _context.Books.ToList();
     }
 }

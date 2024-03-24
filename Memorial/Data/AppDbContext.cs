@@ -17,7 +17,11 @@ namespace Memorial.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Дополнительные конфигурации моделей
+            modelBuilder.Entity<Poem>()
+                .HasOne(p => p.Author)
+                .WithMany(a => a.Poems)
+                .HasForeignKey(p => p.AuthorId);
+
             modelBuilder.Entity<Book>(entity =>
             {
                 modelBuilder.Entity<Book>()

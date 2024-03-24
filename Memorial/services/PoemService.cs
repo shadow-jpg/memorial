@@ -1,5 +1,6 @@
 ﻿using Memorial.Data;
 using Memorial.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Memorial.services
 {

@@ -79,7 +79,7 @@
                         <tr>
                             <td>@poem.Title</td>
                             <td>@poem.Author?.Name</td>
-                            <td>@poem.CreatedAt.ToString("dd.MM.yyyy")</td>
+                            <td>@poem.CreatedAt?.ToShortDateString()</td>
                             <td>
                                 <a asp-page="EditPoem" asp-route-id="@poem.Id" class="btn btn-sm btn-warning">
                                     <i class="bi bi-pencil"></i>

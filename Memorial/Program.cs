@@ -1,4 +1,7 @@
+using FluentValidation;
 using Memorial.Data;
+using Memorial.Models.Validators;
+using Memorial.Models;
 using Memorial.services;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,9 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<BookService>();
-builder.Services.AddScoped<PoemService>(); 
-builder.Services.AddScoped<ChapterService>();
+builder.Services.AddScoped<IValidator<Author>, AuthorValidator>();
+builder.Services.AddScoped<IValidator<Book>, BookValidator>();
+builder.Services.AddScoped<IValidator<Chapter>, ChapterValidator>();
+builder.Services.AddScoped<IValidator<Poem>, PoemValidator>();
+
 builder.AddServiceDefaults();
 builder.Services.AddRazorPages();
 
@@ -55,7 +60,29 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
 
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+
+            ValidateLifetime = true,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
+// Авторизация
+builder.Services.AddAuthorization();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

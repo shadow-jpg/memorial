@@ -1,4 +1,4 @@
-﻿@page"{id}"
+﻿@* @page"{id}"
 @model Memorial.Pages.PoemEnlistedModel
 @{
     ViewData["Title"] = Model.Poem.Title;
@@ -20,7 +20,7 @@
         
         <div class="poem-meta mt-4">
             <small class="text-muted">
-                Добавлено: @Model.Poem.CreatedAt.ToString("dd.MM.yyyy") | 
+                Добавлено: @Model.Poem.CreatedAt?.ToString("dd.MM.yyyy") | 
                 Просмотров: @Model.Poem.ViewsCount
             </small>
         </div>
@@ -46,4 +46,4 @@
             margin-bottom: 1rem;
         }
     </style>
-}
+} *@

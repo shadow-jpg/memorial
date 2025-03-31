@@ -1,9 +1,12 @@
 ﻿using FluentValidation;
 
 namespace Memorial.Models.Validators
-{
+{  
+    /// <summary>
+   /// Добавить проврку на цензурность имени?? сильно позже если потребуется расширить для более чем одного автора
+   /// </summary>
     public class AuthorValidator : AbstractValidator<Author>
-    {
+    { 
         public AuthorValidator()
         {
             RuleFor(a => a.Name)

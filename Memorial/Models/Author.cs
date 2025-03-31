@@ -1,4 +1,6 @@
-﻿namespace Memorial.Models
+﻿using Memorial.Data;
+
+namespace Memorial.Models
 {
     public class Author
     {
@@ -6,6 +8,8 @@
         public string Name { get; set; }
         public string Bio { get; set; }
         public string PhotoUrl { get; set; }
+        public User user { get; set; }
+        public long UserId { get; set; }
         public ICollection<Book> Books { get; set; } = new List<Book>();
         public ICollection<Poem> Poems { get; set; } = new List<Poem>();
         public Author Default => new Author 

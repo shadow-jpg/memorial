@@ -4,6 +4,7 @@ using Memorial.Models.Validators;
 using Memorial.Models;
 using Memorial.services;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddScoped<IValidator<Author>, AuthorValidator>();
 builder.Services.AddScoped<IValidator<Book>, BookValidator>();
 builder.Services.AddScoped<IValidator<Chapter>, ChapterValidator>();
 builder.Services.AddScoped<IValidator<Poem>, PoemValidator>();
+builder.Services.AddScoped<IValidator<RegisterDto>, UserValidator>(); 
 
 builder.AddServiceDefaults();
 builder.Services.AddRazorPages();

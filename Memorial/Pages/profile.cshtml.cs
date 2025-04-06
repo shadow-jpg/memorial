@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+using Memorial.Data;
+using FluentValidation;
+using Memorial.Models.Validators;
+using Memorial.Models;
 
 
 namespace Memorial.Pages
@@ -10,82 +12,67 @@ namespace Memorial.Pages
 
     public class ProfileModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IValidator <UserValidator> _userValidator;
 
-        public ProfileModel(UserManager<IdentityUser> userManager)
+        private readonly AppDbContext _context;
+
+        public ProfileModel(IValidator<UserValidator> userValidator, AppDbContext context)
         {
-            _userManager = userManager;
+            _userValidator = userValidator;
+            _context =  context;
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public User user { get; set; }
 
-        public class InputModel
-        {
-            [EmailAddress]
-            public string Email { get; set; }
 
-            [Display(Name = "Full Name")]
-            public string FullName { get; set; }
+        //public async Task<IActionResult> OnGetAsync()
+        //{
+        //    var user = await _context.GetUserAsync(User);
+        //    if (user == null)
+        //    {
+        //        return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+        //    }
 
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
-        }
 
-        public async Task<IActionResult> OnGetAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+        //    return Page();
+        //}
 
-            Input = new InputModel
-            {
-                Email = user.Email,
-                FullName = user.UserName, // Assuming FullName is stored in UserName
-                PhoneNumber = user.PhoneNumber
-            };
+        //public async Task<IActionResult> OnPostAsync()
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Page();
+        //    }
 
-            return Page();
-        }
+        //    var user = await _userManager.GetUserAsync(User);
+        //    if (user == null)
+        //    {
+        //        return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+        //    }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+        //    if (Input.FullName != user.UserName)
+        //    {
+        //        user.UserName = Input.FullName;
+        //    }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+        //    if (Input.PhoneNumber != user.PhoneNumber)
+        //    {
+        //        user.PhoneNumber = Input.PhoneNumber;
+        //    }
 
-            if (Input.FullName != user.UserName)
-            {
-                user.UserName = Input.FullName;
-            }
+        //    var result = await _userManager.UpdateAsync(user);
+        //    if (!result.Succeeded)
+        //    {
+        //        foreach (var error in result.Errors)
+        //        {
+        //            ModelState.AddModelError(string.Empty, error.Description);
+        //        }
+        //        return Page();
+        //    }
 
-            if (Input.PhoneNumber != user.PhoneNumber)
-            {
-                user.PhoneNumber = Input.PhoneNumber;
-            }
-
-            var result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-                return Page();
-            }
-
-            return RedirectToPage();
-        }
+        //    return RedirectToPage();
+        //}
     }
 }
 

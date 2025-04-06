@@ -12,6 +12,7 @@ namespace Memorial.Data
         public DbSet<Poem> Poems { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Chapter> Chapters { get; set; }
+        public DbSet<User> Users { get; set; }
         //public DbSet<Author> Authors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,6 +36,9 @@ namespace Memorial.Data
                 .Property(b => b.Title)
                 .HasMaxLength(50);
             });
+
+            //modelBuilder.Entity<User>()
+            //    .HasForeignKey(p => p.AuthorId);
         }
     }
 }

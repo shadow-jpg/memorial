@@ -20,6 +20,10 @@ namespace Memorial.Models.Validators
                 .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
                 .When(a => !string.IsNullOrEmpty(a.PhotoUrl))
                 .WithMessage("Некорректный URL фотографии");
+
+            RuleFor(x => x.user.Email)
+            .NotEmpty().WithMessage("Email обязателен")
+            .EmailAddress().WithMessage("Некорректный формат email");
         }
     }
 }

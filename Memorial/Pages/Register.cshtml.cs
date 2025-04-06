@@ -1,65 +1,47 @@
+using FluentValidation;
+using Memorial.Data;
+using Memorial.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Memorial.Pages
 {
     public class RegisterModel : PageModel
     {
-
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-
-        public RegisterModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }
-
         [BindProperty]
-        public InputModel Input { get; set; }
+        public RegisterDto Input { get; set; }
+        private readonly IValidator<RegisterDto> _validator;
+        private AppDbContext _context;
 
-        public class InputModel
+        public RegisterModel( IValidator<RegisterDto> validator, AppDbContext context, RegisterDto model)
         {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
-
-            [Required]
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
-
-            [DataType(DataType.Password)]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
+            _validator = validator;
+            _context = context;
+            Input = model;
         }
 
-        public void OnGet()
-        {
-        }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
+            var validationResult = await _validator.ValidateAsync(Input);
+            if (!validationResult.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
-                var result = await _userManager.CreateAsync(user, Input.Password);
-
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToPage("/Index");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                //foreach (var error in validationResult.Errors)
+                //    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                return RedirectToPage("/Error", validationResult.Errors);
             }
 
-            return Page();
+            string hashedPassword = Input.Password;//  BCrypt.HashPassword(Input.Password, BCrypt.GenerateSalt());
+            var user = new User { Email = Input.Email, Password = hashedPassword };
+            _context.Users.Add(user); 
+            await _context.SaveChangesAsync();
+            return RedirectToPage("/Index");
         }
-    
-}
+
+
+
+    }
 }

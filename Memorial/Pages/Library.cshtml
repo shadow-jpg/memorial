@@ -1,0 +1,106 @@
+﻿@page
+@model Memorial.Pages.LibraryModel
+@{
+    ViewData["Title"] = "Моя библиотека";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
+    
+    <!-- Навигационные вкладки -->
+    <ul class="nav nav-tabs" id="libraryTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="books-tab" data-bs-toggle="tab" 
+                    data-bs-target="#books" type="button" role="tab" 
+                    aria-controls="books" aria-selected="true">
+                Книги (@Model.Books.Count)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="poems-tab" data-bs-toggle="tab" 
+                    data-bs-target="#poems" type="button" role="tab" 
+                    aria-controls="poems" aria-selected="false">
+                Поэмы (@Model.Poems.Count)
+            </button>
+        </li>
+    </ul>
+
+    <!-- Контент вкладок -->
+    <div class="tab-content mt-3" id="libraryContent">
+        <div class="tab-pane fade show active" id="books" role="tabpanel" aria-labelledby="books-tab">
+            @if (Model.Books.Any())
+            {
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    @foreach (var book in Model.Books)
+                    {
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                <img src="@book.CoverImageUrl" class="card-img-top" alt="Обложка книги" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">@book.Title</h5>
+                                    <p class="card-text text-muted">@book.Author.Name</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a asp-page="/Books/Details" asp-route-id="@book.Id" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            Читать
+                                        </a>
+                                        <small class="text-muted">@book.CreatedAt?.ToString("dd.MM.yyyy")</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info mt-3">В вашей библиотеке пока нет книг</div>
+            }
+        </div>
+
+        <div class="tab-pane fade" id="poems" role="tabpanel" aria-labelledby="poems-tab">
+            @if (Model.Poems.Any())
+            {
+                <div class="list-group">
+                    @foreach (var poem in Model.Poems)
+                    {
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">@poem.Title</h5>
+                                <small>@poem.CreatedAt?.ToString("dd.MM.yyyy")</small>
+                            </div>
+                            <p class="mb-1">@poem.Content.Substring(0, Math.Min(100, poem.Content.Length))...</p>
+                            <small>Автор: @poem.Author.Name</small>
+                            <a asp-page="/Poems/Details" asp-route-id="@poem.Id" 
+                               class="stretched-link"></a>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info mt-3">В вашей библиотеке пока нет поэм</div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card-img-top {
+            border-bottom: 1px solid rgba(0,0,0,.125);
+        }
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+        .stretched-link::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            content: "";
+        }
+    </style>
+}

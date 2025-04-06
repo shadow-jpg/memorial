@@ -5,6 +5,7 @@ using Memorial.Models;
 using Memorial.services;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +16,16 @@ builder.Services.AddScoped<IValidator<Author>, AuthorValidator>();
 builder.Services.AddScoped<IValidator<Book>, BookValidator>();
 builder.Services.AddScoped<IValidator<Chapter>, ChapterValidator>();
 builder.Services.AddScoped<IValidator<Poem>, PoemValidator>();
-builder.Services.AddScoped<IValidator<RegisterDto>, UserValidator>(); 
+builder.Services.AddScoped<IValidator<RegisterDto>, UserValidator>();
+
+builder.Services.AddScoped<BookService>();
+builder.Services.AddScoped<ChapterService>();
+builder.Services.AddScoped<PoemService>();
+builder.Services.AddScoped<UsersAuth>();
 
 builder.AddServiceDefaults();
 builder.Services.AddRazorPages();
+
 
 var app = builder.Build();
 
@@ -59,6 +66,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Add("X-Frame-Options", "DENY");
+    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
+    await next();
+});
 app.UseHttpsRedirection();
 
 app.UseRouting();
@@ -81,7 +95,6 @@ app.UseRouting();
 //        };
 //    });
 
-// Авторизация
 builder.Services.AddAuthorization();
 
 app.UseAuthentication();
@@ -91,13 +104,6 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Add("X-Frame-Options", "DENY");
-    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
-    await next();
-});
 
 
 app.Run();

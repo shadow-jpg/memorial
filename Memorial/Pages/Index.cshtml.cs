@@ -18,9 +18,12 @@ public class IndexModel : PageModel
     public List<Book> Books { get; set; }
     public List<Poem> Poems { get; set; }
 
-    public void OnGet()
-    {
-        Books = _bookService.GetBooks();
-        Poems = _poemService.GetPoems();
+    public async Task OnGet()
+    {                                               
+        var BooksTask =  _bookService.GetBooksAsync();
+        var PoemsTask =  _poemService.GetPoemsAsync();
+        await Task.WhenAll(BooksTask, PoemsTask);
+        Books = await BooksTask;
+        Poems = await PoemsTask;
     }
 }

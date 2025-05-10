@@ -14,7 +14,7 @@ namespace Memorial.Data
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<User> Users { get; set; }
         //public DbSet<Author> Authors { get; set; }
-
+        public DbSet<UserBook> UserBooks { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -37,8 +37,20 @@ namespace Memorial.Data
                 .HasMaxLength(50);
             });
 
-            //modelBuilder.Entity<User>()
-            //    .HasForeignKey(p => p.AuthorId);
+            modelBuilder.Entity<User>();
+
+            modelBuilder.Entity<UserBook>()
+                .HasKey(ub => new { ub.UserId, ub.BookId });
+
+            modelBuilder.Entity<UserBook>()
+                .HasOne(ub => ub.User)
+                .WithMany(u => u.UserBooks)
+                .HasForeignKey(ub => ub.UserId);
+
+            modelBuilder.Entity<UserBook>()
+                .HasOne(ub => ub.Book)
+                .WithMany(b => b.UserBooks)
+                .HasForeignKey(ub => ub.BookId);
         }
     }
 }

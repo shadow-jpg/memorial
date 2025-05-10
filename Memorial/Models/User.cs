@@ -1,4 +1,6 @@
-﻿namespace Memorial.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Memorial.Models
 {
     public class User
     {
@@ -11,5 +13,19 @@
         public string Email { get; set; }
         public string AvatarPicture { get; set; }
         public bool IsAuthor { get; set; }
+
+        public ICollection<UserBook> UserBooks { get; set; } = new List<UserBook>();
+        public virtual ICollection<IdentityUserRole<long>> UserRoles { get; set; }
+    }
+
+    public enum AppRoles
+    {
+        NonAuthorized, // Не авторизован (особая роль)
+        User,
+        Author,
+        Moderator,
+        Admin,
+        SuperAdmin,
+        ProductOwner
     }
 }

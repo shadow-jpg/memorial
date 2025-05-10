@@ -1,5 +1,6 @@
 using Memorial.Data;
 using Memorial.Models;
+using Memorial.services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,23 +11,27 @@ namespace Memorial.Pages
     [Authorize]
     public class LibraryModel : PageModel
     {
-        private readonly AppDbContext _context;
+        private readonly BookService _bookService;
+        private readonly PoemService _poemService;
 
         public List<Book> Books { get; set; } = new();
         public List<Poem> Poems { get; set; } = new();
 
-        public LibraryModel(AppDbContext context)
+        public LibraryModel(BookService bookService, PoemService poemService)
         {
-            _context = context;
+            _bookService = bookService;
+            _poemService = poemService;
         }
 
         public async Task OnGetAsync()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            Books =  _context.Books.ToList();
-
-            Poems =  _context.Poems.ToList();
+            var BooksTask = _bookService.GetBooksAsync();
+            var PoemsTask = _poemService.GetPoemsAsync();
+            await Task.WhenAll(BooksTask, PoemsTask);
+            Books = await BooksTask;
+            Poems = await PoemsTask;
         }
     }
 }

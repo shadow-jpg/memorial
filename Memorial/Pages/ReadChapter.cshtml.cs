@@ -16,7 +16,7 @@ namespace Memorial.Pages
         public Chapter CurrentChapter { get; set; }
         public List<Chapter> Chapters { get; set; }
 
-        public void OnGet(int id)
+        public async Task OnGet(int id)
         {
             Chapters = _chapterService.GetChapters();
             CurrentChapter = _chapterService.GetChapterById(id) ?? Chapters.First();

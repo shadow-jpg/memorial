@@ -49,7 +49,42 @@ namespace Memorial.services
                 .OrderBy(c => c.Id)
                 .ToListAsync();
         }
+        public async Task<List<Chapter>> GetChaptersWithAccessCheckAsync(long bookId, long? userId)
+        {
+            var book = await _context.Books
+               .Include(b => b.UserBooks.Where(ub => ub.UserId == userId))
+               .FirstOrDefaultAsync(b => b.Id == bookId);
 
+            if (book == null)
+                return new List<Chapter>();
+            if (book.Allowed_ToRead_without_payment == null)
+            {
+                return
+            }
+            else {
+                // Проверяем покупки пользователя
+                bool isBookPurchased = book.UserBooks.Any(ub => ub.IsPurchased);
+                var purchasedChapterIds = book.UserBooks
+                    .SelectMany(ub => ub.PurchasedChapters)
+                    .ToList();
+
+                // Получаем все главы
+                var chapters = await _context.Chapters
+                    .Where(c => c.BookId == bookId)
+                    .OrderBy(c => c.Number)
+                    .ToListAsync();
+
+                // Фильтруем результат
+                return chapters
+                    .Where(c =>
+                        isBookFree || // Вся книга бесплатна
+                        isBookPurchased || // Книга куплена
+                        purchasedChapterIds.Contains(c.Id) || // Глава куплена
+                        c.Number <= freeChaptersLimit // Глава в пределах бесплатного лимита
+                    )
+                    .ToList();
+            }
+        }
         public async Task<Chapter> GetChapterAsync(int id)
         {
             return await _context.Chapters

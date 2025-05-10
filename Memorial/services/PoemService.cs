@@ -35,7 +35,7 @@ namespace Memorial.services
             };
         }
 
-  
+        public async Task<List<Poem>> GetPoemsAsync()=> await _context.Poems.ToListAsync();
 
         public async Task<List<Poem>> GetPublishedPoemsAsync()
         {

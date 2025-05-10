@@ -16,5 +16,7 @@
         public long Dislikes { get; set; }
         public double? Price { get; set; }
         public DateTime? CreatedAt { get; set; }
+
+        public ICollection<UserBook> UserBooks { get; set; } = new List<UserBook>();
     }
 }
